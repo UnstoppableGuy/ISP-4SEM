@@ -1,6 +1,6 @@
 import yaml
 
-from serializer import object_serializer
+from parsers.serializer import object_serializer
 
 
 class yaml_serializer(object_serializer):

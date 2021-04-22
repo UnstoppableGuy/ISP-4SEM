@@ -1,6 +1,7 @@
 import pickle
 
-from serializer import object_serializer
+from parsers.serializer import object_serializer
+
 
 class pickle_serializer(object_serializer):
 
