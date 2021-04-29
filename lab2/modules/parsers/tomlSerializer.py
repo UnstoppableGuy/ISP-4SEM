@@ -1,6 +1,6 @@
 import toml
 
-from parsers.serializer import object_serializer
+from modules.parsers.serializer import object_serializer
 
 
 class toml_serializer(object_serializer):

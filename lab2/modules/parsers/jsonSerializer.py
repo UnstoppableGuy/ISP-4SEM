@@ -1,6 +1,6 @@
 import json
 
-from parsers.serializer import object_serializer
+from modules.parsers.serializer import object_serializer
 
 
 class json_serializer(object_serializer):

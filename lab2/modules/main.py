@@ -1,8 +1,8 @@
-from consoleApp import read_from_config, parser_build
-from parsers.jsonSerializer import json_serializer
-from parsers.pickleSerializer import pickle_serializer
-from parsers.tomlSerializer import toml_serializer
-from parsers.yamlSerializer import yaml_serializer
+from modules.parsers.jsonSerializer import json_serializer
+from modules.parsers.pickleSerializer import pickle_serializer
+from modules.parsers.tomlSerializer import toml_serializer
+from modules.parsers.yamlSerializer import yaml_serializer
+from modules.consoleApp import parser_build, read_from_config
 
 
 def choose_serializer(input_format, output_format):
