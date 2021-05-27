@@ -1,0 +1,7 @@
+aiogram==2.13
+autopep8==1.5.5
+Flask==1.0.2
+pyTelegramBotAPI==3.6.6
+pytest==6.2.4
+rethinkdb==2.3.0.post6
+rethinkdbcm==0.1.3
