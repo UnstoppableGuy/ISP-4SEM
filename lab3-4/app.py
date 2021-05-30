@@ -9,13 +9,14 @@ from config import Status
 import logging
 from telebot import types
 import re
-
+import tg_analytics as tga
 app = Flask(__name__)
 app.config.from_object(Config)
 
 bot = Bot(app.config['API_TOKEN'])
 dp = Dispatcher(bot)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.DEBUG, filename=u'logs.log')
 logger = logging.getLogger(__name__)
 
 WEBHOOK_PORT = app.config['WEBHOOK_PORT']
@@ -43,6 +44,18 @@ ID, PAS, LOGIN, CHT, GENDER, PHONE, EMAIL, DATA_REG, UNAME = \
     app.config['GENDER'], app.config['PHONE'], \
     app.config['EMAIL'], app.config['DATA_REG'], \
     app.config['UNAME']
+
+
+def save_user_activity():
+    def decorator(func):
+        @wraps(func)
+        def command_func(message, *args, **kwargs):
+            tga.statistics(message.chat.id, message.text)
+            return func(message, *args, **kwargs)
+
+        return command_func
+
+    return decorator
 
 
 def save_state(id_bot=None, login=None, pas=None, st=None,
@@ -186,7 +199,7 @@ async def user_data(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.LOGIN_USER.value)
+    str(message.chat.id)] == ST.LOGIN_USER.value)
 async def get_login_user(message):
     if DB.presence_id(DB_BOT, TAB_DATA, ID, str(message.text)):
         save_state(id_bot=str(message.chat.id), login=message.text.lower(),
@@ -202,7 +215,7 @@ async def get_login_user(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.PASSWORD_USER.value)
+    str(message.chat.id)] == ST.PASSWORD_USER.value)
 async def get_password_user(message):
     login = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN]
     pas = set_password(login, message.text)
@@ -232,7 +245,7 @@ async def edit_password_user(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.PASSWORD_EDIT.value)
+    str(message.chat.id)] == ST.PASSWORD_EDIT.value)
 async def save_pass(message):
     if password_check(message.text):
         js = {LOGIN: DB.get_user_id(
@@ -265,7 +278,7 @@ async def edit_phone(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.PHONE_EDIT.value)
+    str(message.chat.id)] == ST.PHONE_EDIT.value)
 async def save_phone(message):
     if valid_phone(message.text):
         js = {LOGIN: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN], PHONE: message.text,
@@ -296,7 +309,7 @@ async def edit_email(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.EMAIL_EDIT.value)
+    str(message.chat.id)] == ST.EMAIL_EDIT.value)
 async def save_email(message):
     if valid_email(message.text):
         login = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN]
@@ -421,7 +434,7 @@ async def new_user(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.LOGIN_NEW.value)
+    str(message.chat.id)] == ST.LOGIN_NEW.value)
 async def new_login(message):
     if not DB.presence_id(DB_BOT, TAB_DATA, ID, str(message.text.lower())) \
             and valid_login(str(message.text.lower())):
@@ -443,7 +456,7 @@ async def new_login(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.PASSWORD_NEW.value)
+    str(message.chat.id)] == ST.PASSWORD_NEW.value)
 async def new_password(message):
     if password_check(message.text):
         usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
@@ -513,7 +526,7 @@ async def recover_get_user(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.LOGIN_RECOVER.value)
+    str(message.chat.id)] == ST.LOGIN_RECOVER.value)
 async def recover_get_email(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -535,7 +548,7 @@ async def recover_get_email(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.EMAIL_RECOVER.value)
+    str(message.chat.id)] == ST.EMAIL_RECOVER.value)
 async def recover_get_phone(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -563,7 +576,7 @@ async def recover_get_phone(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.PHONE_RECOVER.value)
+    str(message.chat.id)] == ST.PHONE_RECOVER.value)
 async def recover_get_pass(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -592,7 +605,7 @@ async def recover_get_pass(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.PASSWORD_RECOVER.value)
+    str(message.chat.id)] == ST.PASSWORD_RECOVER.value)
 async def recover_password_user(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -625,7 +638,7 @@ async def setting_app(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.LOGIN_ROOT.value)
+    str(message.chat.id)] == ST.LOGIN_ROOT.value)
 async def user_entering_name(message):
     if verify(str(message.chat.id), username=message.text) == message.text:
         save_state(id_bot=str(message.chat.id),
@@ -637,7 +650,7 @@ async def user_entering_name(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.PASSWORD_ROOT.value)
+    str(message.chat.id)] == ST.PASSWORD_ROOT.value)
 async def user_entering_password(message):
     usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
     if verify(str(message.chat.id), password=message.text) == \
@@ -793,7 +806,7 @@ async def get_login_adm(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.SUPERUSER.value)
+    str(message.chat.id)] == ST.SUPERUSER.value)
 async def get_password_adm(message):
     if valid_login(str(message.text.lower())):
         save_state(id_bot=str(message.chat.id),
@@ -804,7 +817,7 @@ async def get_password_adm(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.SUPER_PASS.value)
+    str(message.chat.id)] == ST.SUPER_PASS.value)
 async def set_password_superuser(message):
     if password_check(message.text):
         usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
@@ -846,7 +859,7 @@ async def edit_password_adm(message):
 
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
-                                             str(message.chat.id)] == ST.CHANGE_SU.value)
+    str(message.chat.id)] == ST.CHANGE_SU.value)
 async def update_password_superuser(message):
     if password_check(message.text):
         usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
