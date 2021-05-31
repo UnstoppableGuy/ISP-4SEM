@@ -178,6 +178,7 @@ async def start_bot(message):
 
 
 @dp.message_handler(func=lambda message: app.config['MAIN_MENU'] == message.text, content_types=['text'])
+@save_user_activity()
 async def main_menu(message):
     save_state(id_bot=str(message.chat.id), st=ST.START.value, res=True)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -189,6 +190,7 @@ async def main_menu(message):
 
 
 @dp.message_handler(func=lambda message: app.config['USER_DATA'] == message.text, content_types=['text'])
+@save_user_activity()
 async def user_data(message):
     save_state(id_bot=str(message.chat.id), st=ST.LOGIN_USER.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -200,6 +202,7 @@ async def user_data(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.LOGIN_USER.value)
+@save_user_activity()
 async def get_login_user(message):
     if DB.presence_id(DB_BOT, TAB_DATA, ID, str(message.text)):
         save_state(id_bot=str(message.chat.id), login=message.text.lower(),
@@ -216,6 +219,7 @@ async def get_login_user(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.PASSWORD_USER.value)
+@save_user_activity()    
 async def get_password_user(message):
     login = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN]
     pas = set_password(login, message.text)
@@ -234,6 +238,7 @@ async def get_password_user(message):
 
 
 @dp.message_handler(func=lambda message: app.config['PASSWORD_EDIT'] == message.text, content_types=['text'])
+@save_user_activity()
 async def edit_password_user(message):
     save_state(id_bot=str(message.chat.id), st=ST.PASSWORD_EDIT.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -246,6 +251,7 @@ async def edit_password_user(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.PASSWORD_EDIT.value)
+@save_user_activity()    
 async def save_pass(message):
     if password_check(message.text):
         js = {LOGIN: DB.get_user_id(
@@ -268,6 +274,7 @@ async def save_pass(message):
 
 
 @dp.message_handler(func=lambda message: app.config['PHONE_EDIT'] == message.text, content_types=['text'])
+@save_user_activity()
 async def edit_phone(message):
     save_state(id_bot=str(message.chat.id), st=ST.PHONE_EDIT.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -279,6 +286,7 @@ async def edit_phone(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.PHONE_EDIT.value)
+@save_user_activity()
 async def save_phone(message):
     if valid_phone(message.text):
         js = {LOGIN: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN], PHONE: message.text,
@@ -299,6 +307,7 @@ async def save_phone(message):
 
 
 @dp.message_handler(func=lambda message: app.config['EMAIL_EDIT'] == message.text, content_types=['text'])
+@save_user_activity()
 async def edit_email(message):
     save_state(id_bot=str(message.chat.id), st=ST.EMAIL_EDIT.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -310,6 +319,7 @@ async def edit_email(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.EMAIL_EDIT.value)
+@save_user_activity()    
 async def save_email(message):
     if valid_email(message.text):
         login = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN]
@@ -331,6 +341,7 @@ async def save_email(message):
 
 
 @dp.message_handler(func=lambda message: app.config['GENDER_EDIT'] == message.text, content_types=['text'])
+@save_user_activity()
 async def edit_gender(message):
     save_state(id_bot=str(message.chat.id), st=ST.GENDER.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -342,6 +353,7 @@ async def edit_gender(message):
 
 @dp.message_handler(
     func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] == ST.GENDER.value)
+@save_user_activity()
 async def save_gender(message):
     js = {LOGIN: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN], GENDER: message.text,
           CHT: datetime.now().strftime("%Y-%m-%d %X")}
@@ -357,6 +369,7 @@ async def save_gender(message):
 
 
 @dp.message_handler(func=lambda message: app.config['NAME_EDIT'] == message.text, content_types=['text'])
+@save_user_activity()
 async def edit_name(message):
     save_state(id_bot=str(message.chat.id), st=ST.NAME.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -368,6 +381,7 @@ async def edit_name(message):
 
 @dp.message_handler(
     func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] == ST.NAME.value)
+@save_user_activity()    
 async def save_name(message):
     js = {LOGIN: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[LOGIN], UNAME: message.text,
           CHT: datetime.now().strftime("%Y-%m-%d %X")}
@@ -383,6 +397,7 @@ async def save_name(message):
 
 
 @dp.message_handler(func=lambda message: app.config['DELETE_PROF'] == message.text, content_types=['text'])
+@save_user_activity()
 async def delete_request(message):
     save_state(id_bot=str(message.chat.id), st=ST.DELETE.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -394,6 +409,7 @@ async def delete_request(message):
 
 @dp.message_handler(
     func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] == ST.DELETE.value)
+@save_user_activity()    
 async def delete_confirm(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -412,6 +428,7 @@ async def delete_confirm(message):
 
 @dp.message_handler(
     func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] == ST.EDIT.value)
+@save_user_activity()    
 async def edit_profile(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     save_state(id_bot=str(message.chat.id), st=ST.EDIT.value)
@@ -424,6 +441,7 @@ async def edit_profile(message):
 
 
 @dp.message_handler(func=lambda message: app.config['CREATE_USER'] == message.text, content_types=['text'])
+@save_user_activity()
 async def new_user(message):
     save_state(id_bot=str(message.chat.id), st=ST.LOGIN_NEW.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -435,6 +453,7 @@ async def new_user(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.LOGIN_NEW.value)
+@save_user_activity()    
 async def new_login(message):
     if not DB.presence_id(DB_BOT, TAB_DATA, ID, str(message.text.lower())) \
             and valid_login(str(message.text.lower())):
@@ -457,6 +476,7 @@ async def new_login(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.PASSWORD_NEW.value)
+@save_user_activity()    
 async def new_password(message):
     if password_check(message.text):
         usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
@@ -476,6 +496,7 @@ async def new_password(message):
 
 @dp.message_handler(
     func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] == ST.EMAIL.value)
+@save_user_activity()    
 async def new_email(message):
     if valid_email(message.text):
         save_state(id_bot=str(message.chat.id),
@@ -493,6 +514,7 @@ async def new_email(message):
 
 @dp.message_handler(
     func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] == ST.PHONE.value)
+@save_user_activity()    
 async def create_user(message):
     if valid_phone(message.text):
         save_state(id_bot=str(message.chat.id),
@@ -514,6 +536,7 @@ async def create_user(message):
 
 
 @dp.message_handler(func=lambda message: app.config['PASSWORD_RECOVERY'] == message.text, content_types=['text'])
+@save_user_activity()
 async def recover_get_user(message):
     save_state(id_bot=str(message.chat.id),
                st=ST.LOGIN_RECOVER.value, res=True)
@@ -527,6 +550,7 @@ async def recover_get_user(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.LOGIN_RECOVER.value)
+@save_user_activity()
 async def recover_get_email(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -549,6 +573,7 @@ async def recover_get_email(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.EMAIL_RECOVER.value)
+@save_user_activity()    
 async def recover_get_phone(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -577,6 +602,7 @@ async def recover_get_phone(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.PHONE_RECOVER.value)
+@save_user_activity()    
 async def recover_get_pass(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -606,6 +632,7 @@ async def recover_get_pass(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.PASSWORD_RECOVER.value)
+@save_user_activity()    
 async def recover_password_user(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -628,6 +655,7 @@ async def recover_password_user(message):
 
 
 @dp.message_handler(commands=['setting'])
+@save_user_activity()
 async def setting_app(message):
     save_state(id_bot=str(message.chat.id), st=ST.LOGIN_ROOT.value, res=True)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -639,6 +667,7 @@ async def setting_app(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.LOGIN_ROOT.value)
+@save_user_activity()    
 async def user_entering_name(message):
     if verify(str(message.chat.id), username=message.text) == message.text:
         save_state(id_bot=str(message.chat.id),
@@ -651,6 +680,7 @@ async def user_entering_name(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.PASSWORD_ROOT.value)
+@save_user_activity()    
 async def user_entering_password(message):
     usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
     if verify(str(message.chat.id), password=message.text) == \
@@ -685,6 +715,7 @@ async def user_entering_password(message):
 
 
 @dp.message_handler(func=lambda message: app.config['CREATE_DBASE'] == message.text, content_types=['text'])
+@save_user_activity()
 async def creating_database(message):
     user_markup = types.ReplyKeyboardMarkup(True, False)
     user_markup.row(app.config['MAIN_MENU'])
@@ -711,6 +742,7 @@ async def creating_database(message):
 
 
 @dp.message_handler(func=lambda message: app.config['DELETE_DBASE'] == message.text, content_types=['text'])
+@save_user_activity()
 async def deleting_database(message):
     save_state(id_bot=str(message.chat.id), st=ST.CHECKED.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -742,6 +774,7 @@ async def deleting_database(message):
 
 
 @dp.message_handler(func=lambda message: app.config['CREATE_DB_TAB'] == message.text, content_types=['text'])
+@save_user_activity()
 async def creating_tables(message, user_markup=None):
     if DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] \
             == ST.CHECKED.value:
@@ -781,6 +814,7 @@ async def creating_tables(message, user_markup=None):
 
 
 @dp.message_handler(func=lambda message: app.config['LIST_TABLES'] == message.text, content_types=['text'])
+@save_user_activity()
 async def list_tables(message):
     if DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[str(message.chat.id)] \
             == ST.CHECKED.value:
@@ -795,6 +829,7 @@ async def list_tables(message):
 
 
 @dp.message_handler(func=lambda message: app.config['CREATE_SU_USER'] == message.text, content_types=['text'])
+@save_user_activity()
 async def get_login_adm(message):
     save_state(id_bot=str(message.chat.id), st=ST.SUPERUSER.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -807,6 +842,7 @@ async def get_login_adm(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.SUPERUSER.value)
+@save_user_activity()    
 async def get_password_adm(message):
     if valid_login(str(message.text.lower())):
         save_state(id_bot=str(message.chat.id),
@@ -818,6 +854,7 @@ async def get_password_adm(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.SUPER_PASS.value)
+@save_user_activity()    
 async def set_password_superuser(message):
     if password_check(message.text):
         usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
@@ -848,6 +885,7 @@ async def set_password_superuser(message):
 
 
 @dp.message_handler(func=lambda message: app.config['CHANGE_PASSWORD_SU'] == message.text, content_types=['text'])
+@save_user_activity()
 async def edit_password_adm(message):
     save_state(id_bot=str(message.chat.id), st=ST.CHANGE_SU.value)
     user_markup = types.ReplyKeyboardMarkup(True, False)
@@ -860,6 +898,7 @@ async def edit_password_adm(message):
 
 @dp.message_handler(func=lambda message: DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))[
     str(message.chat.id)] == ST.CHANGE_SU.value)
+@save_user_activity()    
 async def update_password_superuser(message):
     if password_check(message.text):
         usr = DB.get_user_id(DB_BOT, TAB_LOG, str(message.chat.id))
