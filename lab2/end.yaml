@@ -1,0 +1,21 @@
+args:
+  annotations: {}
+  args:
+  - a
+  - b
+  defaults: null
+  kwonlyargs: []
+  kwonlydefaults: null
+  varargs: null
+  varkw: null
+base64: gASVHQAAAAAAAACMDXRlc3Rfc3RhcnRhcHCUjAdteV9mdW5jlJOULg==
+code:
+- 'def my_func(a, b):'
+- '    return (a * b) ** 2'
+- ''
+dict_class: {}
+name: my_func
+object: <function my_func at 0x7fe698a83040>
+serializable_by_default: false
+type: function
+value: null

@@ -1,0 +1,14 @@
+base64 = "gASVHQAAAAAAAACMDXRlc3Rfc3RhcnRhcHCUjAdteV9mdW5jlJOULg=="
+code = [ "def my_func(a, b):", "    return (a * b) ** 2", "",]
+name = "my_func"
+object = "<function my_func at 0x7f267cac4f70>"
+serializable_by_default = false
+type = "function"
+
+[args]
+args = [ "a", "b",]
+kwonlyargs = []
+
+[dict_class]
+
+[args.annotations]

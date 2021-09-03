@@ -129,6 +129,5 @@ dmypy.json
 .pyre/
 lab2/temp/
 lab2/results
-lab2/requirements.txt
 temp
 lab3-4/data.csv

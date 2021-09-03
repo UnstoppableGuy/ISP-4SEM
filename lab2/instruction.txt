@@ -1,0 +1,13 @@
+python3 -m vevn env
+. env/bin/activate
+pip install -r requirements.txt
+chmod +x console_tool.py
+python3 startapp.py
+python3 console_tool.py --help
+
+testing
+coverage run -m unittest
+coverage report
+
+python3 console_tool.py --convert_format=yaml --file_to_convert=end.yaml --file_from_convert=test.json 
+python3 console_tool.py --convert_format=json --file_to_convert=end.json --file_from_convert=test.yaml 

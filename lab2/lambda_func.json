@@ -1,0 +1,24 @@
+{
+    "object": "<function main.<locals>.<lambda> at 0x7fdf8669de50>",
+    "type": "function",
+    "serializable_by_default": false,
+    "name": "<lambda>",
+    "value": null,
+    "dict_class": {},
+    "args": {
+        "args": [
+            "x"
+        ],
+        "varargs": null,
+        "varkw": null,
+        "defaults": null,
+        "kwonlyargs": [],
+        "kwonlydefaults": null,
+        "annotations": {}
+    },
+    "code": [
+        "    a = lambda x: x + 2",
+        ""
+    ],
+    "base64": "gASV9QAAAAAAAACMCmRpbGwuX2RpbGyUjBBfY3JlYXRlX2Z1bmN0aW9ulJOUKGgAjAxfY3JlYXRlX2NvZGWUk5QoSwFLAEsASwFLAktTQwh8AGQBFwBTAJROSwKGlCmMAXiUhZSMYC9Vc2Vycy91c2VyL0RvY3VtZW50cy9wcm9ncmFtbWluZy9WU0NvZGUvZG9ja2VyL1NlcmlhbGl6ZXIvUHl0aG9uLVNpbXBsZS1TZXJpYWxpemVycy9zdGFydGFwcC5weZSMCDxsYW1iZGE+lEsXQwCUKSl0lFKUY19fYnVpbHRpbl9fCl9fbWFpbl9fCmgKTk59lE50lFKULg=="
+}

@@ -1,0 +1,7 @@
+[run]
+omit =
+    formatserializer/converters/*
+    formatserializer/tests/*
+    formatserializer/testing/*
+    startapp.py
+    test_startapp.py

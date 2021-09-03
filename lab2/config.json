@@ -1,0 +1,5 @@
+{
+  "convert_format": "toml",
+  "file_to_convert": "test.toml",
+  "file_from_convert": "test.json"
+}
