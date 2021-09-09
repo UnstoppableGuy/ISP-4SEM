@@ -1,0 +1,5 @@
+[client]
+database = test_eshopdb
+user = omega
+password = 123456
+default-character-set = utf8

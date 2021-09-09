@@ -1,0 +1,28 @@
+version: "3.7"
+
+volumes:
+  eshopdb:
+  eshop:
+
+services:
+  eshopdb:
+    image: mysql:5.7
+    volumes:
+    - eshopdb:/var/lib/mysql
+    ports:
+      - '3306'
+    environment:
+      MYSQL_DATABASE: 'eshopdb'
+      MYSQL_USER: 'omega'
+      MYSQL_PASSWORD: '123456'
+      MYSQL_ROOT_PASSWORD: '123456'
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  eshop:
+    build: .
+    volumes:
+      - eshop:/usr/src/eshop
+    ports:
+      - '8000:8000'
+    depends_on:
+      - eshopdb
